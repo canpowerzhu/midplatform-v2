@@ -1,19 +1,21 @@
 # @Author  : kane.zhu
 # @Time    : 2021/7/20 21:22
 # @Software: PyCharm
+import tortoise.timezone
 from tortoise import models,fields
 
 class tbl_baseconf(models.Model):
     """
     基础配置表
     """
-    id          = fields.IntField(pk=True)
+    id = fields.IntField(pk=True)
     name        = fields.CharField(max_length=100,description="配置名称")
     conf_key    = fields.CharField(max_length=100,description="配置键")
     conf_value  = fields.CharField(max_length=500,description="配置值")
     category    = fields.CharField(max_length=500,description="分类")
     description = fields.CharField(max_length=100,description="描述")
-    create_time = fields.DatetimeField(auto_now_add=True,description="创建时间")
+    # TODO 自动插入时间的时区已修复，格式待完成
+    create_time = fields.DatetimeField(auto_now_add=True,description="创建时间",default=tortoise.timezone.localtime(timezone="Asia/Shanghai"))
     update_time = fields.DatetimeField(auto_now=True,description="更新时间")
 
 
@@ -21,7 +23,7 @@ class tbl_webhoook_log(models.Model):
     """
     钉钉机器人调用记录
     """
-    id              = fields.IntField(pk=True)
+    id = fields.IntField(pk=True)
     name            = fields.CharField(max_length=150, description='调用者的名称')
     status           = fields.BooleanField(default=True, description='发送的状态 默认是成功')
     content        = fields.JSONField(max_length=100, description='调用发送的内容')
@@ -46,7 +48,7 @@ class tbl_login_out(models.Model):
     """
     登录登出相关日志
     """
-    traceId = fields.CharField(max_length=100,verbose_name='登陆时 产生一个traceId')
+    traceId = fields.CharField(pk=True,max_length=100,verbose_name='登陆时 产生一个traceId')
     username = fields.CharField(max_length=100,verbose_name='用户名')
     status = fields.BooleanField(verbose_name='登陆状态 0-失败 1-成功')
     ip = fields.CharField(max_length=128,description='请求IP地址 设置为128 可支持IPv6')

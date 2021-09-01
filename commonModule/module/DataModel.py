@@ -3,13 +3,19 @@
 # @Software: PyCharm
 from pydantic import BaseModel
 
-# 基于BaseModel 定义请求提的结构（json对象）
+# 基于BaseModel 定义请求体的结构（json对象）
 # 加密数据模型
 class Plaintext(BaseModel):
     plaintext: str #默认是required
-    testmsg: str = False #可选项
 
 
 class Ciphertext(BaseModel):
     ciphertext: str
 
+
+class Addconf(BaseModel):
+    name: str
+    conf_key: str
+    conf_value: str
+    category: str
+    description : str = '' # 默认值为空 属于可选项
