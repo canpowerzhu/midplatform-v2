@@ -143,6 +143,10 @@ cython_debug/
 commonModule/venv
 userModule/venv
 
+
+# env param
+commonModule/.env
+userModule/.env
 # module idea
 commonModule/.idea
 userModule/.idea

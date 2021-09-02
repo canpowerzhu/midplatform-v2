@@ -15,7 +15,7 @@ class tbl_baseconf(models.Model):
     category    = fields.CharField(max_length=500,description="分类")
     description = fields.CharField(max_length=100,description="描述")
     # TODO 自动插入时间的时区已修复，格式待完成
-    create_time = fields.DatetimeField(auto_now_add=True,description="创建时间",default=tortoise.timezone.localtime(timezone="Asia/Shanghai"))
+    create_time = fields.DatetimeField(auto_now_add=True,description="创建时间")
     update_time = fields.DatetimeField(auto_now=True,description="更新时间")
 
 
