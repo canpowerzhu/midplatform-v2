@@ -18,10 +18,22 @@ config = StarletConfig(".env")
 #######################################################################################
 
 class BaseConfig(object):
+    ######################################################################################
+    # OSS CONFIG
+    ACCESSKEY = config('ACCESSKEY', default='')
+    ACCESSSECRET = config('ACCESSSECRET', default='')
+    ENDPOINT = config('ENDPOINT', default='')
+    BUCKETNAME = config('BUCKETNAME', default='moppowar')
     #######################################################################################
+    # server start param
     SERVER_HOST = config('SERVER_HOST', default='127.0.0.1')
     SERVER_PORT = config('SERVER_PORT',cast=int, default=5000)
-    # SERVER_RELOAD = config('SERVER_RELOAD', default=False)
+    # Response Body struct
+    RESP_STRUCT = {
+        'code':'',
+        'msg':'',
+        'data':''
+    }
 
     #######################################################################################
     # INCLUDE_IN_SCHEMA = config('INCLUDE_IN_SCHEMA', cast=bool, default=True)
@@ -77,7 +89,7 @@ class PrdConfig(BaseConfig):
     DB_PORT = config('DB_PORT', cast=int, default=3306)
     DB_DATABASE = config('DB_DATABASE', default='')
     DB_MAX_SIZE = config('DB_MAX_SIZE', cast=int, default=5)
-    print("部分参数",DB_PASSWD,DB_HOST,DB_DATABASE)
+    # print("部分参数",DB_PASSWD,DB_HOST,DB_DATABASE)
 
 Config = PrdConfig
 ORM_LINK_CONF = Config().orm_link_conf

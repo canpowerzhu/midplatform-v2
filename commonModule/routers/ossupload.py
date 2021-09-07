@@ -1,66 +1,46 @@
 # @Author  : kane.zhu
 # @Time    : 2021/8/31 14:43
 # @Software: PyCharm
-import oss2
-import base64
-from common import baseconfig
-auth = oss2.Auth(baseconfig.getconfig()['accessKey'], baseconfig.getconfig()['accessSecret'])
-bucket = oss2.Bucket(auth, baseconfig.getconfig()['endPoint'], baseconfig.getconfig()['bucketName'])
-base_file_url = baseconfig.getconfig()['baseFileUrl']
+import time
 
-def percentage(consumed_bytes, total_bytes):
-    if total_bytes:
-        rate = int(100 * (float(consumed_bytes) / float(total_bytes)))
-        print('\r{0}% '.format(rate), end='')
+from fastapi import APIRouter, status, File, UploadFile
+from module import DataModel
+from utils import OssOps,unPack
+from tempfile import NamedTemporaryFile
+import shutil
+from pathlib import Path
 
-
-def update_fil_file(envtype,project,filename,file):
-    """
-    :param envtype: 环境类型
-    :param project: 项目名称
-    :param filename: 文件名称
-    :param file: 文件流
-    :return:
-    """
-    print(envtype,type(envtype))
-    if envtype == 1:
-        env = 'online'
-    elif envtype == 0:
-        env = 'offline'
-    accessurl = 'midplatform-v2/ApkDir/' + env +'/' + project + '/' + filename
-    # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
-
-    res = bucket.put_object(accessurl,file,progress_callback=percentage)
-    if res.status == 200:
-        return base_file_url + accessurl
-    else:
-        print('fail')
-        return False
+router = APIRouter(
+    prefix='/ossupload',
+    tags=["ossupload"],
+    responses={404: {"description": "Not found"}},
+)
 
 
-
-def uploadBase64Pic(data,projectname='',recordpic=''):
-    b64_data = data.split(';base64,')[1]
-    logoType = data.split(';base64,')[0].split('/')[1]
-    data = base64.b64decode(b64_data)
-    import calendar
-    import time
-    ts = str(calendar.timegm(time.gmtime()))
-    if projectname :
-        print('项目logo')
-        remotePath='midplatform-v2/projectlogo/' + projectname + '.' + logoType
-    elif recordpic:
-        print('record问题追踪图片')
-        remotePath = 'midplatform-v2/recordpic/'+ recordpic +'/' + ts + '.' + logoType
-    else:
-        print('用户头像')
-
-        remotePath = 'midplatform/avatar/' + ts + '.' + logoType
-    res = bucket.put_object(remotePath, data)
-    if not res.status == 200:
-        return False
-    return remotePath
+@router.post("/ossupload/uploadpic", tags=["ossupload"],
+             summary="上传图片至oss",
+             description="以base64方式上传图片",
+             # response_model=dict[int,str,list],
+             status_code=status.HTTP_200_OK)
+async def uploadpic(item: DataModel.OssPicReq):
+    _, res = OssOps.uploadBase64Pic(item.dict()['base64pic'])
+    return {"code": 200, "url": res}
 
 
+@router.post("/ossupload/uploadapk", tags=["ossupload"],
+             summary="上传apk至oss",
+             description="以文件流的方式上传apk",
+             status_code=status.HTTP_200_OK)
+async def uploadapk(file: UploadFile=File(...)):
+    "上传apk至oss"
+
+    with NamedTemporaryFile(delete=False, suffix=Path(file.filename).suffix, dir='tmp/') as tmp:
+        shutil.copyfileobj(file.file, tmp)
+        tmp_file_name = Path(tmp.name).name
+    file.file.close()
+    apk = unPack.parse_apk("tmp/" + tmp_file_name)
+    _, accessurl =   OssOps.uploadApk("tmp/" + tmp_file_name,file.filename)
+    print(accessurl, apk.package_name, apk.version_name, apk.version_code)
 
 
+    return {"code": 200,"filename": file.filename,"filetype": file.content_type}

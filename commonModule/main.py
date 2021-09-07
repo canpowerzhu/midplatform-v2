@@ -8,7 +8,7 @@ from fastapi import FastAPI, HTTPException, Header
 # register_tortoise APP对象和操作的数据库绑定在一起
 from tortoise.contrib.fastapi import register_tortoise
 # import config
-from routers import baseconf, encrypto
+from routers import baseconf, encrypto,ossupload
 
 import settings
 
@@ -18,6 +18,8 @@ app = FastAPI()
 app.include_router(encrypto.router)
 # 基础配置相关
 app.include_router(baseconf.router)
+# 文件上传相关
+app.include_router(ossupload.router)
 
 
 async def get_token_header(x_token: str = Header(...)):
@@ -25,7 +27,7 @@ async def get_token_header(x_token: str = Header(...)):
         raise HTTPException(status_code=400, detail="X-Token header invalid")
 
 
-register_tortoise(app, config=settings.ORM_LINK_CONF,generate_schemas=True)
+register_tortoise(app, config=settings.ORM_LINK_CONF,generate_schemas=False)
 
 if __name__ == '__main__':
     import uvicorn
