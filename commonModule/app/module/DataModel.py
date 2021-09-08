@@ -47,3 +47,7 @@ class OssPicReq(BaseModel):
 
 class OssApkReq(BaseModel):
     file_stream: bytes
+
+class OssExcelReq(BaseModel):
+    module_name: str #模块名称 比如billing,cmdb等
+    excel_data: dict

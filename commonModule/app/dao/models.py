@@ -52,13 +52,27 @@ class tbl_login_out(models.Model):
     """
     登录登出相关日志
     """
-    traceId = fields.CharField(pk=True,max_length=100,verbose_name='登陆时 产生一个traceId')
-    username = fields.CharField(max_length=100,verbose_name='用户名')
-    status = fields.BooleanField(verbose_name='登陆状态 0-失败 1-成功')
+    traceId = fields.CharField(pk=True,max_length=100,description='登陆时 产生一个traceId')
+    username = fields.CharField(max_length=100,description='用户名')
+    status = fields.BooleanField(description='登陆状态 0-失败 1-成功')
     ip = fields.CharField(max_length=128,description='请求IP地址 设置为128 可支持IPv6')
-    os_type = fields.CharField(max_length=200, verbose_name='操作系统类型')
-    broswer_type = fields.CharField(max_length=100, verbose_name='浏览器类型')
-    broswer_version = fields.CharField(max_length=100, verbose_name='浏览器版本')
-    user_agent = fields.CharField(max_length=500, verbose_name='useragent信息')
-    action = fields.BooleanField(verbose_name='0-登出 1-登陆')
-    request_time = fields.DatetimeField(auto_now_add=True,verbose_name='请求时间')
+    os_type = fields.CharField(max_length=200, description='操作系统类型')
+    broswer_type = fields.CharField(max_length=100, description='浏览器类型')
+    broswer_version = fields.CharField(max_length=100, description='浏览器版本')
+    user_agent = fields.CharField(max_length=500, description='useragent信息')
+    action = fields.BooleanField(description='0-登出 1-登陆')
+    request_time = fields.DatetimeField(auto_now_add=True,description='请求时间')
+
+class tbl_apklist(models.Model):
+    """
+    apk保存相关
+    """
+    project_name = fields.CharField(max_length=100,description='所属项目名称')
+    package_name = fields.CharField(max_length=100,description='包名')
+    verison = fields.CharField(max_length=10,description='版本')
+    version_code = fields.IntField(max_length=18,description='版本号')
+    env_type = fields.IntField(description="0-正式环境;1-预发布环境;2-测试环境")
+    size = fields.BigIntField(max_length=10, description='apk文件大小')
+    owner = fields.CharField(max_length=50, description='操作人')
+    file_path = fields.CharField(max_length=500, description='文件相对路径')
+    create_time = fields.DatetimeField(auto_now_add=True,description='请求时间')

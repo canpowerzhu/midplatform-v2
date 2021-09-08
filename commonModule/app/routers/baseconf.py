@@ -3,9 +3,9 @@
 # @Software: PyCharm
 from fastapi import APIRouter,status
 from fastapi.encoders import jsonable_encoder
-import settings
-from dao import models
-from module import DataModel
+from app import settings
+from app.dao import models
+from app.module import DataModel
 from starlette.responses import JSONResponse
 
 router = APIRouter(
@@ -14,7 +14,7 @@ router = APIRouter(
     responses={404:{"description":"Not found"}},
 )
 
-@router.get("/baseconf",tags=["baseconf"],
+@router.get("/",tags=["baseconf"],
             summary="获取内部配置key列表",
             description="内部模块 获取配置的key",
             # response_model=dict[int,str,list],
@@ -33,16 +33,16 @@ async  def getconflist(page: int = 1, limit :int = 10):
         return JSONResponse(jsonable_encoder(settings.BaseConfig.RESP_STRUCT))
 
 
-@router.get("/baseconf/{conf_key}",tags=["baseconf"],summary="获取内部配置选项", description="内部模块 获取配置的value")
+@router.get("/{conf_key}",tags=["baseconf"],summary="获取内部配置选项", description="内部模块 获取配置的value")
 async  def getconf(conf_key: str):
     pass
 
-@router.put("/baseconf/{item_id}",tags=["baseconf"], summary="更新内部配置选项", description="内部模块 更新配置")
+@router.put("/{item_id}",tags=["baseconf"], summary="更新内部配置选项", description="内部模块 更新配置")
 async  def updateconf(item_id: int):
     pass
 
 
-@router.post("/baseconf",
+@router.post("/",
              tags=["baseconf"],
              summary="新增内部配置选项",
              description="内部模块 新增配置",

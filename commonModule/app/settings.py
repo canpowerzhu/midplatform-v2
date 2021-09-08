@@ -1,29 +1,26 @@
 # @Author  : kane.zhu
 # @Time    : 2021/9/2 15:46
 # @Software: PyCharm
-# __all__ = [
-#     'Config', 'ORM_LINK_CONF'
-# ]
 
-# import os
 from starlette.config import Config as StarletConfig
 #
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+import os
 
-config = StarletConfig(".env")
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+config = StarletConfig(os.path.join(os.path.dirname(BASE_PATH),'.env'))
 
-
-# CODE_ENV = config('CODE_ENV', default='prd')
 
 #######################################################################################
 
 class BaseConfig(object):
+
     ######################################################################################
     # OSS CONFIG
     ACCESSKEY = config('ACCESSKEY', default='')
     ACCESSSECRET = config('ACCESSSECRET', default='')
-    ENDPOINT = config('ENDPOINT', default='')
-    BUCKETNAME = config('BUCKETNAME', default='moppowar')
+    ENDPOINT = config('ENDPOINT',default='')
+    BUCKETNAME = config('BUCKETNAME', default='')
+    ACCESSDOMAIN = config('ACCESSDOMAIN', default='moppowar')
     #######################################################################################
     # server start param
     SERVER_HOST = config('SERVER_HOST', default='127.0.0.1')

@@ -1,6 +1,7 @@
 # @Author  : kane.zhu
 # @Time    : 2021/9/7 16:03
 # @Software: PyCharm
+# @func    : 解析apk文件信息
 
 import zipfile
 from xml.dom import minidom

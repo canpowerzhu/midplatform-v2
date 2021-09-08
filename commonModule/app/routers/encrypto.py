@@ -2,8 +2,8 @@
 # @Time    : 2021/7/21 12:02
 # @Software: PyCharm
 from fastapi import APIRouter
-from module import DataModel
-from utils import PasswordSalt
+from app.module import DataModel
+from app.utils import PasswordSalt
 
 router = APIRouter(
     prefix='/encrypt',

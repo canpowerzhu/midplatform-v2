@@ -4,7 +4,7 @@
 
 import time, calendar, base64, oss2
 
-import settings
+from app import settings
 
 # 定义file文件名，以及相关子路径命名
 ts = str(calendar.timegm(time.gmtime()))
@@ -26,17 +26,14 @@ def uploadApk(file, filename):
     :param file: 本地临时文件
     :return:
     """
-    import os
-    print("即将要上传的文件是===", file)
-    print("即将要上传的文件大小===", os.path.getsize(file))
-    print("即将要上传的文件大小===", os.path.getsize(file))
+    import os.path
+    from pathlib import Path
+    file = Path(os.path.join(settings.BaseConfig.BASE_PATH, file)).as_posix()
 
-    # TODO 上传后的apk文件 size不匹配 需要更改
     accessurl = 'midplatform-v2/ApkDir/' + subdir + '/' + ts + '_' + filename
     # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
     try:
-        res = bucket.put_object(accessurl, file, progress_callback=percentage)
-        print(res.status)
+        bucket.put_object_from_file(accessurl, file, progress_callback=percentage)
     except Exception as err:
         return False, err
     return True, accessurl
@@ -53,3 +50,14 @@ def uploadBase64Pic(data):
     except Exception as err:
         return False, err
     return True, remotePath
+
+
+def uploadExcel(file,filename):
+    accessurl = 'midplatform-v2/excel/' + subdir + '/' + ts + '_' + filename
+    # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
+    try:
+        bucket.put_object_from_file(accessurl, file, progress_callback=percentage)
+    except Exception as err:
+        return False, err
+    return True, accessurl
+
