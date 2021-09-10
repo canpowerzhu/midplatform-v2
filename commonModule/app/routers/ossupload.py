@@ -31,7 +31,7 @@ async def upload_pic(item: DataModel.OssPicReq):
              summary="生成excel并上传至oss",
              description="传json数据",
              # response_model=dict[int,str,list],
-             status_code=status.HTTP_200_OK)
+             status_code=status.HTTP_201_CREATED)
 async def make_excel(item: DataModel.OssExcelReq):
     # TODO 生成excel文件流待完成，传入数据流返回url
     # OssOps.uploadExcel(file, filename="test.excel")
@@ -41,7 +41,7 @@ async def make_excel(item: DataModel.OssExcelReq):
 @router.post("/uploadapk", tags=["ossupload"],
              summary="上传apk至oss",
              description="以文件流的方式上传apk",
-             status_code=status.HTTP_200_OK)
+             status_code=status.HTTP_201_CREATED)
 async def upload_apk(file: UploadFile = File(...)):
     "上传apk至oss"
     import os
