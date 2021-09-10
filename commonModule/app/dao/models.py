@@ -44,7 +44,7 @@ class tbl_operate_log(models.Model):
     ip = fields.CharField(max_length=128,description='请求IP地址 设置为128 可支持IPv6')
     params = fields.TextField(blank=True, null=True, description="请求参数")
     status = fields.BooleanField(description='操作状态 0-异常 1-正常')
-    operate_type = fields.CharField(max_length=500, description='操作类型 修改 新增 删除等')
+    operate_type = fields.IntField(max_length=500, description='操作类型 0-新增 1-删除 2-改 3-查等')
     request_time = fields.DatetimeField(auto_now_add=True,description='请求时间')
 
 class tbl_login_out(models.Model):

@@ -10,14 +10,12 @@ class Plaintext(BaseModel):
     """
     plaintext: str  # 默认是required
 
-
 class Ciphertext(BaseModel):
     """
     基于BaseModel 定义请求体的结构（json对象）
     解密数据模型
     """
     ciphertext: str
-
 
 class Addconf(BaseModel):
     """
@@ -42,11 +40,47 @@ class OssPicReq(BaseModel):
     "上传base64图片"
     base64pic: str
 
-
 class OssApkReq(BaseModel):
     file_stream: bytes
-
 
 class OssExcelReq(BaseModel):
     module_name: str  # 模块名称 比如billing,cmdb等
     excel_data: dict
+
+
+class OperateLog(BaseModel):
+    """
+    业务操作日志记录
+    """
+    traceId: str
+    username: str
+    protocol: str
+    path: str
+    ip: str
+    params: str
+    status: bool
+    operate_type: int
+
+
+class WebhookLog(BaseModel):
+    """
+    webhook 调用记录
+    """
+    name: str
+    status: bool
+    content: str
+
+
+class LoginOut(BaseModel):
+    """
+    登陆与登出相关日志
+    """
+    traceId : str
+    username: str
+    status: bool
+    ip: str
+    os_type: str
+    broswer_type: str
+    broswer_version: str
+    user_agent: str
+    action: bool
