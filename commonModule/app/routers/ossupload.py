@@ -3,9 +3,8 @@
 # @Software: PyCharm
 
 from fastapi import APIRouter, status, File, UploadFile
-
 from app.module import DataModel
-from app.utils import OssOps, unPack
+from app.utils import OssOps, unPack,ExcelFile
 from tempfile import NamedTemporaryFile
 import shutil
 from pathlib import Path
@@ -27,6 +26,7 @@ async def upload_pic(item: DataModel.OssPicReq):
     return {"code": 200, "url": res}
 
 
+
 @router.post("/makeexcel", tags=["ossupload"],
              summary="生成excel并上传至oss",
              description="传json数据",
@@ -35,6 +35,7 @@ async def upload_pic(item: DataModel.OssPicReq):
 async def make_excel(item: DataModel.OssExcelReq):
     # TODO 生成excel文件流待完成，传入数据流返回url
     # OssOps.uploadExcel(file, filename="test.excel")
+    ExcelFile.write_excel(item.app_name,item.func_name,item.excel_data)
     return {"code": 200, "url": "res"}
 
 
@@ -42,20 +43,26 @@ async def make_excel(item: DataModel.OssExcelReq):
              summary="上传apk至oss",
              description="以文件流的方式上传apk",
              status_code=status.HTTP_201_CREATED)
-async def upload_apk(file: UploadFile = File(...)):
+async def upload_apk(files: UploadFile = File(...)):
     "上传apk至oss"
     import os
-    with NamedTemporaryFile(delete=False, suffix=Path(file.filename).suffix, dir='tmp/') as tmp:
-        shutil.copyfileobj(file.file, tmp)
-        tmp_file_name = Path(tmp.name).name
-    file.file.close()
-    apk = unPack.parse_apk("tmp/" + tmp_file_name)
-    _, accessurl = OssOps.uploadApk("tmp/" + tmp_file_name, file.filename)
+
+    save_dir = "app/tmp"
+    try:
+        with NamedTemporaryFile(delete=False, suffix=Path(files.filename).suffix, dir=save_dir) as tmp:
+            shutil.copyfileobj(files.file, tmp)
+            tmp_file_name = Path(tmp.name).name
+    finally:
+        files.file.close()
+    local_file = save_dir+"/"+tmp_file_name
+    apk = unPack.parse_apk(local_file)
+    _, accessurl = OssOps.uploadApk(local_file, files.filename)
+
     resp_data = {}
     resp_data['package_name'] = apk.package_name
     resp_data['version_code'] = apk.version_code
     resp_data['version_name'] = apk.version_name
-    resp_data['package_size'] = os.path.getsize("tmp/" + tmp_file_name)
+    resp_data['package_size'] = os.path.getsize(local_file)
     resp_data['accessurl'] = accessurl
 
     return {"code": 200, "url": resp_data}

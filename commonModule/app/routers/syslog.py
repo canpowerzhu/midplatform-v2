@@ -52,17 +52,32 @@ async def get_login_out(current_page: int = 1,
                         trace_id: Optional[str] = Query(None),
                         status: Optional[bool] = Query(None)):
     QuerySet = {}
-    #如果没有结束时间，则结束时间为现在
+    # 如果没有结束时间，则结束时间为现在
     if start_time != None and end_time == None:
         end_time = datetime.datetime.now()
 
     # 判断时间范围，开始时间小于结束时间，并小于现在
-    if start_time .__lt__  (end_time) and end_time .__lt__(datetime.datetime.now()):
+    if start_time.__lt__(end_time) and end_time.__lt__(datetime.datetime.now()):
         print("time_range_ok")
 
+    if ip is not None:
+        QuerySet['ip'] = ip
 
+    if trace_id is not None:
+        QuerySet['trace_id'] = trace_id
 
-    print(current_page, show_size, username, ip, start_time, end_time, action, trace_id, status)
+    if username is not None:
+        QuerySet['username'] = username
+
+    if action is not None:
+        QuerySet['action'] = action
+
+    if status is not None:
+        QuerySet['status'] = status
+
+    res= await  models.tbl_login_out.all().values_list()
+    print(res)
+    # print(current_page, show_size, username, ip, start_time, end_time, action, trace_id, status)
     return {"plaintext": "res_dict", "ciphertext": "ciphertext"}
 
 

@@ -44,7 +44,8 @@ class OssApkReq(BaseModel):
     file_stream: bytes
 
 class OssExcelReq(BaseModel):
-    module_name: str  # 模块名称 比如billing,cmdb等
+    app_name: str  # 模块名称 比如billing,cmdb等
+    func_name: str
     excel_data: dict
 
 

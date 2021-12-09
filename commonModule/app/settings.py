@@ -101,7 +101,7 @@ class PrdConfig(BaseConfig):
     DB_PORT = config('DB_PORT', cast=int, default=3306)
     DB_DATABASE = config('DB_DATABASE', default='')
     DB_MAX_SIZE = config('DB_MAX_SIZE', cast=int, default=5)
-    print("部分参数",DB_PASSWD,DB_HOST,DB_DATABASE)
+    # print("部分参数",DB_PASSWD,DB_HOST,DB_DATABASE)
 
 Config = PrdConfig
 ORM_LINK_CONF = Config().orm_link_conf

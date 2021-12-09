@@ -26,10 +26,6 @@ def uploadApk(file, filename):
     :param file: 本地临时文件
     :return:
     """
-    import os.path
-    from pathlib import Path
-    file = Path(os.path.join(settings.BaseConfig.BASE_PATH, file)).as_posix()
-
     accessurl = 'midplatform-v2/ApkDir/' + subdir + '/' + ts + '_' + filename
     # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
     try:
