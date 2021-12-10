@@ -4,7 +4,7 @@
 
 from fastapi import APIRouter, status, File, UploadFile
 from app.module import DataModel
-from app.utils import OssOps, unPack,ExcelFile
+from app.utils import oss_operate, parse_apk,excel_file
 from tempfile import NamedTemporaryFile
 import shutil
 from pathlib import Path
@@ -22,7 +22,7 @@ router = APIRouter(
              # response_model=dict[int,str,list],
              status_code=status.HTTP_200_OK)
 async def upload_pic(item: DataModel.OssPicReq):
-    _, res = OssOps.uploadBase64Pic(item.dict()['base64pic'])
+    _, res = oss_operate.uploadBase64Pic(item.dict()['base64pic'])
     return {"code": 200, "url": res}
 
 
@@ -35,7 +35,7 @@ async def upload_pic(item: DataModel.OssPicReq):
 async def make_excel(item: DataModel.OssExcelReq):
     # TODO 生成excel文件流待完成，传入数据流返回url
     # OssOps.uploadExcel(file, filename="test.excel")
-    access_url = ExcelFile.write_excel(item.app_name,item.func_name,item.excel_data)
+    access_url = excel_file.write_excel(item.app_name, item.func_name, item.excel_data)
     return {"code": 200, "url": access_url}
 
 
@@ -55,8 +55,8 @@ async def upload_apk(files: UploadFile = File(...)):
     finally:
         files.file.close()
     local_file = save_dir+"/"+tmp_file_name
-    apk = unPack.parse_apk(local_file)
-    _, accessurl = OssOps.uploadApk(local_file, files.filename)
+    apk = parse_apk.parse_apk(local_file)
+    _, accessurl = oss_operate.uploadApk(local_file, files.filename)
 
     resp_data = {}
     resp_data['package_name'] = apk.package_name

@@ -4,6 +4,7 @@
 
 import time,hmac, hashlib,base64,urllib.parse,requests,json
 
+
 class Webhook(object):
     """
     定义 钉钉webhook通知相关
@@ -21,6 +22,7 @@ class Webhook(object):
         :param content: 推送内容
         :return: bool 成功或者失败
         """
+
         timestamp = str(round(time.time() * 1000))
         secret_enc = self.secret.encode('utf-8')
         string_to_sign = '{}\n{}'.format( timestamp, self.secret)
@@ -30,16 +32,12 @@ class Webhook(object):
         sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))
 
         #拼接请求地址
-        api_url = "https://oapi.dingtalk.com/robot/send?access_token=" + self.token + "timestamp=" + timestamp  + "&sign=" + sign
+        api_url = "https://oapi.dingtalk.com/robot/send?access_token=" + self.token + "&timestamp=" + timestamp  + "&sign=" + sign
         headers = {'Content-Type': 'application/json;charset=utf-8'}
-        try:
-            requests.post(url=api_url, data=json.dumps(content), headers=headers)
-            return True
-        except Exception as e:
-            print(e)
-            return False
+        res = requests.post(url=api_url, data=content, headers=headers)
 
+        return res.status_code, res.content
 
-
+    # 发送成功与否记录日志，供来查看
     def record(self):
         pass

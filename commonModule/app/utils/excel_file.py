@@ -4,7 +4,7 @@
 
 import xlwings as xw
 import time
-from app.utils import OssOps
+from app.utils import oss_operate
 from pathlib import Path
 
 
@@ -32,5 +32,5 @@ def write_excel(app_name, func_name, data):
         app.kill()
     # 判断文件是否存在，上传返回url
     if Path(excel_name).is_file():
-        _, res = OssOps.uploadExcel(excel_name)
+        _, res = oss_operate.uploadExcel(excel_name)
     return res

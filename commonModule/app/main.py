@@ -6,7 +6,7 @@
 from fastapi import FastAPI, HTTPException, Header
 # register_tortoise APP对象和操作的数据库绑定在一起
 from tortoise.contrib.fastapi import register_tortoise
-from app.routers import encrypto,ossupload,baseconf,syslog
+from app.routers import encrypto,ossupload,baseconf,syslog,webhook
 import settings
 
 app = FastAPI()
@@ -19,6 +19,8 @@ app.include_router(baseconf.router)
 app.include_router(ossupload.router)
 # 日志相关
 app.include_router(syslog.router)
+# dingTalk相关
+app.include_router(webhook.router)
 
 
 async def get_token_header(x_token: str = Header(...)):

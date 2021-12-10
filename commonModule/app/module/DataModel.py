@@ -85,3 +85,11 @@ class LoginOut(BaseModel):
     broswer_version: str
     user_agent: str
     action: bool
+
+class Webhook_Data(BaseModel):
+    """
+    dingTalk 发送数据结构体
+    """
+    token: str
+    secret: str
+    send_content: dict
