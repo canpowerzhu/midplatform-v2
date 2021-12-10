@@ -4,6 +4,10 @@
 
 import xlwings as xw
 import time
+from app.utils import OssOps
+from pathlib import Path
+
+
 def write_excel(app_name, func_name, data):
     """
     :param app_name: 应用名称
@@ -11,18 +15,22 @@ def write_excel(app_name, func_name, data):
     :param data: 数据
     :return:
     """
-    app=xw.App(visible=False,add_book=False)
-    app.display_alerts=False
-    app.screen_updating=False
-    wb=app.books.add()
+    excel_name = app_name + '_' + func_name + '_' + time.strftime("%Y%m%d%H%M%S", time.localtime()) + '.xlsx'
+    app = xw.App(visible=False, add_book=False)
+    app.display_alerts = False
+    app.screen_updating = False
+    wb = app.books.add()
     try:
-        sht=wb.sheets['Sheet1']
-        sht.range('A1').value='a22'
+        sht = wb.sheets['Sheet1']
+        sht.range('A1').value = data
         try:
-            wb.save(r'd:\3.xlsx')
+            wb.save(excel_name)
         except Exception as e:
-           print(e)
+            print("ee" + str(e))
     finally:
         wb.close()
         app.kill()
-    return True
+    # 判断文件是否存在，上传返回url
+    if Path(excel_name).is_file():
+        _, res = OssOps.uploadExcel(excel_name)
+    return res

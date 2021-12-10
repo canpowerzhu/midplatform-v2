@@ -35,8 +35,8 @@ async def upload_pic(item: DataModel.OssPicReq):
 async def make_excel(item: DataModel.OssExcelReq):
     # TODO 生成excel文件流待完成，传入数据流返回url
     # OssOps.uploadExcel(file, filename="test.excel")
-    ExcelFile.write_excel(item.app_name,item.func_name,item.excel_data)
-    return {"code": 200, "url": "res"}
+    access_url = ExcelFile.write_excel(item.app_name,item.func_name,item.excel_data)
+    return {"code": 200, "url": access_url}
 
 
 @router.post("/uploadapk", tags=["ossupload"],

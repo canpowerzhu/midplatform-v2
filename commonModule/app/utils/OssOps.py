@@ -48,8 +48,8 @@ def uploadBase64Pic(data):
     return True, remotePath
 
 
-def uploadExcel(file,filename):
-    accessurl = 'midplatform-v2/excel/' + subdir + '/' + ts + '_' + filename
+def uploadExcel(file):
+    accessurl = 'midplatform-v2/excel/' + subdir  + '/' + file
     # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
     try:
         bucket.put_object_from_file(accessurl, file, progress_callback=percentage)

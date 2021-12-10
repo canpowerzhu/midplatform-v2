@@ -46,7 +46,7 @@ class OssApkReq(BaseModel):
 class OssExcelReq(BaseModel):
     app_name: str  # 模块名称 比如billing,cmdb等
     func_name: str
-    excel_data: dict
+    excel_data: list
 
 
 class OperateLog(BaseModel):
