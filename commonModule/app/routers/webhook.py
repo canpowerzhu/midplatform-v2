@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.post("/webhook",
+@router.post("/baseconf",
              tags=["baseconf"],
              summary="新增内部配置选项",
              description="内部模块 新增配置",

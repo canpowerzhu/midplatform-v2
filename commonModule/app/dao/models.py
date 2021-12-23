@@ -1,7 +1,7 @@
 # @Author  : kane.zhu
 # @Time    : 2021/7/20 21:22
 # @Software: PyCharm
-
+import ipaddress
 
 from tortoise import models,fields
 
@@ -62,6 +62,23 @@ class tbl_login_out(models.Model):
     action = fields.BooleanField(description='0-登出 1-登陆')
     request_time = fields.DatetimeField(auto_now_add=True,description='请求时间')
 
+
+class tbl_api_access_log(models.Model):
+    """
+    api调用记录表
+    """
+    trace_id = fields.CharField(max_length=100, description='登陆时 产生一个traceId')
+    ip = ipaddress.IPv4Interface(address='127.0.0.1')
+    method = fields.CharField(max_length=10,description='请求方式')
+    uri = fields.CharField(max_length=200,description='请求的路径')
+    user_agent = fields.CharField(max_length=500,description='请求的user-agent')
+    params = fields.CharField(max_length=200,null=True,description='请求参数')
+    req_body = fields.TextField(description='请求体')
+    http_status = fields.IntField(index=True)
+    resp_body = fields.TextField(description="响应体")
+    app_key = fields.CharField(index=True,max_length=30,description='app key')
+    request_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
+
 class tbl_apklist(models.Model):
     """
     apk保存相关
@@ -74,4 +91,25 @@ class tbl_apklist(models.Model):
     size = fields.BigIntField(max_length=10, description='apk文件大小')
     owner = fields.CharField(max_length=50, description='操作人')
     file_path = fields.CharField(max_length=500, description='文件相对路径')
+    create_time = fields.DatetimeField(auto_now_add=True,description='请求时间')
+
+
+class tbl_excel_file(models.Model):
+    """
+    excel文件相关
+    """
+    file_name = fields.CharField(max_length=100,description='文件名称')
+    relative_path = fields.CharField(max_length=100,description='文件的相对路径')
+    owner = fields.CharField(max_length=10,description='拥有者')
+    is_download = fields.BooleanField(description='是否可以下载')
+    create_time = fields.DatetimeField(auto_now_add=True,description='请求时间')
+
+
+class tbl_img_file(models.Model):
+    """
+    图像文件相关
+    """
+    img_name = fields.CharField(max_length=100,description='图像名称')
+    relative_path = fields.CharField(max_length=100,description='图像的相对路径')
+    owner = fields.CharField(max_length=10,description='拥有者')
     create_time = fields.DatetimeField(auto_now_add=True,description='请求时间')

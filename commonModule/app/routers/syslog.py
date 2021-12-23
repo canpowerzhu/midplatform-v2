@@ -19,7 +19,7 @@ router = APIRouter(
 
 
 @router.post("/login_out", tags=["log"],
-             summary="日志相关",
+             summary="登陆登出日志相关",
              description="登陆登出日志")
 async def login_out(item: DataModel.LoginOut):
     try:
@@ -36,8 +36,13 @@ async def login_out(item: DataModel.LoginOut):
     return JSONResponse(jsonable_encoder(BaseConfig.POST_DATA))
 
 
+
+
+
+
+
 @router.get("/login_out", tags=["log"],
-            summary="日志相关",
+            summary="登陆登出日志相关",
             # response_model=DataModel.LoginOut,
             response_model_include={'id', 'request_time'},
             description="登陆登出日志,系统调用")
@@ -81,12 +86,47 @@ async def get_login_out(current_page: int = 1,
     return {"plaintext": "res_dict", "ciphertext": "ciphertext"}
 
 
-@router.post("/operate", tags=["log"],
-             summary="操作日志相关",
-             description="操作日志")
-async def operate_log(example={'plaintext': "必填，格式是string类型"}):
+@router.post("/api_access", tags=["log"],
+             summary="api调用日志",
+             description="内部api调用")
+async def login_out(item: DataModel.LoginOut):
+    try:
+        await  models.tbl_api_access_log.create(**item.dict())
+        code = status.HTTP_201_CREATED
+        message = 'success'
+    except Exception as e:
+        print(e)
+        message = 'fail'
+        code = status.HTTP_400_BAD_REQUEST
+
+    BaseConfig.POST_DATA['code'] = code
+    BaseConfig.POST_DATA['message'] = message
+    return JSONResponse(jsonable_encoder(BaseConfig.POST_DATA))
+
+@router.get("/api_access", tags=["log"],
+            summary="api调用日志",
+            description="操作日志")
+async def get_operate_log(example={'plaintext': "必填，格式是string类型"}):
     return {"plaintext": "res_dict", "ciphertext": "ciphertext"}
 
+
+
+@router.post("/operate", tags=["log"],
+             summary="操作日志日志",
+             description="操作日志")
+async def login_out(item: DataModel.LoginOut):
+    try:
+        await  models.tbl_operate_log.create(**item.dict())
+        code = status.HTTP_201_CREATED
+        message = 'success'
+    except Exception as e:
+        print(e)
+        message = 'fail'
+        code = status.HTTP_400_BAD_REQUEST
+
+    BaseConfig.POST_DATA['code'] = code
+    BaseConfig.POST_DATA['message'] = message
+    return JSONResponse(jsonable_encoder(BaseConfig.POST_DATA))
 
 @router.get("/operate", tags=["log"],
             summary="操作日志相关",
