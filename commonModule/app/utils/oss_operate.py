@@ -10,6 +10,7 @@ from app import settings
 ts = str(calendar.timegm(time.gmtime()))
 subdir = time.strftime("%Y%m%d", time.localtime())
 
+headers = {}
 # 初始化oss相关对象
 auth = oss2.Auth(settings.Config.ACCESSKEY, settings.Config.ACCESSSECRET)
 bucket = oss2.Bucket(auth, settings.Config.ENDPOINT, settings.Config.BUCKETNAME)
@@ -53,6 +54,27 @@ def uploadExcel(file):
     # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
     try:
         bucket.put_object_from_file(accessurl, file, progress_callback=percentage)
+    except Exception as err:
+        return False, err
+    return True, accessurl
+
+
+def uploadZip(file,filename):
+    accessurl = 'midplatform-v2/compressfile/' + subdir  + '/' + filename
+    # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
+    try:
+        bucket.put_object(accessurl, file, progress_callback=percentage)
+    except Exception as err:
+        return False, err
+    return True, accessurl
+
+
+
+def uploadVideo(file,filename):
+    accessurl = 'midplatform-v2/video/' + subdir  + '/' + filename
+    # 这个是阿里提供的SDK方法 bucket是调用的4.1中配置的变量名
+    try:
+        bucket.put_object(accessurl, file, progress_callback=percentage)
     except Exception as err:
         return False, err
     return True, accessurl

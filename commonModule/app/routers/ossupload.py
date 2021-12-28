@@ -66,3 +66,28 @@ async def upload_apk(files: UploadFile = File(...)):
     resp_data['accessurl'] = accessurl
 
     return {"code": 200, "url": resp_data}
+
+
+@router.post("/uploadzip", tags=["ossupload"],
+             summary="上传视频文件至oss",
+             description="以文件流方式上传",
+             status_code=status.HTTP_200_OK)
+async def upload_zip(files: UploadFile = File(...)):
+    if files.content_type != 'application/x-zip-compressed':
+        return {"code": 400, "msg": "please upload zip format file"}
+    fileflow = await files.read()
+    oss_operate.uploadZip(fileflow,files.filename)
+    return {"code": 200, "url": "dd"}
+
+
+
+@router.post("/uploadvideo", tags=["ossupload"],
+             summary="上传压缩文件至oss",
+             description="以文件流方式上传",
+             status_code=status.HTTP_200_OK)
+async def upload_video(files: UploadFile = File(...)):
+    if files.content_type != 'video/mp4':
+        return {"code": 400, "msg": "please upload MP4 format file"}
+    fileflow = await files.read()
+    _, res = oss_operate.uploadVideo(fileflow,files.filename)
+    return {"code": 200, "url": res}

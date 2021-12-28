@@ -36,11 +36,6 @@ async def login_out(item: DataModel.LoginOut):
     return JSONResponse(jsonable_encoder(BaseConfig.POST_DATA))
 
 
-
-
-
-
-
 @router.get("/login_out", tags=["log"],
             summary="登陆登出日志相关",
             # response_model=DataModel.LoginOut,
@@ -80,7 +75,7 @@ async def get_login_out(current_page: int = 1,
     if status is not None:
         QuerySet['status'] = status
 
-    res= await  models.tbl_login_out.all().values_list()
+    res = await  models.tbl_login_out.all().values_list()
     print(res)
     # print(current_page, show_size, username, ip, start_time, end_time, action, trace_id, status)
     return {"plaintext": "res_dict", "ciphertext": "ciphertext"}
@@ -103,12 +98,12 @@ async def login_out(item: DataModel.LoginOut):
     BaseConfig.POST_DATA['message'] = message
     return JSONResponse(jsonable_encoder(BaseConfig.POST_DATA))
 
+
 @router.get("/api_access", tags=["log"],
             summary="api调用日志",
             description="操作日志")
 async def get_operate_log(example={'plaintext': "必填，格式是string类型"}):
     return {"plaintext": "res_dict", "ciphertext": "ciphertext"}
-
 
 
 @router.post("/operate", tags=["log"],
@@ -127,6 +122,7 @@ async def login_out(item: DataModel.LoginOut):
     BaseConfig.POST_DATA['code'] = code
     BaseConfig.POST_DATA['message'] = message
     return JSONResponse(jsonable_encoder(BaseConfig.POST_DATA))
+
 
 @router.get("/operate", tags=["log"],
             summary="操作日志相关",
