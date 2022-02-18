@@ -3,11 +3,14 @@
 # @Software: PyCharm
 import uvicorn
 from fastapi import FastAPI
+from routers import users,usergroups,roles,rolegroups
 
 app = FastAPI()
-@app.get("/user",summary="用户接口", description="用户接口描述")
-async def user(example={'userId': "必填，格式是number类型"}):
-    return  {"message":"hello world"}
+
+app.include_router(router=users.router)
+app.include_router(router=usergroups.router)
+app.include_router(router=roles.router)
+app.include_router(router=rolegroups.router)
 
 if __name__ == '__main__':
     uvicorn.run(app="main:app",host="127.0.0.1", port=5001, reload=True)
