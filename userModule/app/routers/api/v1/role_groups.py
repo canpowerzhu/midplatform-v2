@@ -6,7 +6,7 @@
 from fastapi import  APIRouter
 
 router = APIRouter(
-    prefix='/rolegrups',
-    tags=["rolegrups"],
+    prefix='/role_groups',
+    tags=["role_groups"],
     responses={404: {"description": "Not found"}},
 )
