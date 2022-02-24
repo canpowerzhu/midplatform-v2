@@ -21,7 +21,7 @@ class BaseConf(models.Model):
 
     # category conf_key 联合唯一，保证大类里面不重复
     class Meta:
-        db_table = "tbl_base_config"
+        table = "tbl_base_config"
         unique_together = (("category", "conf_key"),)
 
 
@@ -36,7 +36,7 @@ class WebhookLog(models.Model):
     create_time = fields.DatetimeField(auto_now_add=True, description='创建时间')
 
     class Meta:
-        db_table = "tbl_webhoook_log"
+        table = "tbl_webhoook_log"
 
 
 class OperateLog(models.Model):
@@ -54,7 +54,7 @@ class OperateLog(models.Model):
     request_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
 
     class Meta:
-        db_table = "tbl_operate_log"
+        table = "tbl_operate_log"
 
 
 class LoginOut(models.Model):
@@ -73,7 +73,7 @@ class LoginOut(models.Model):
     request_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
 
     class Meta:
-        db_table = "tbl_login_out"
+        table = "tbl_login_out"
 
 
 class ApiAccessLog(models.Model):
@@ -93,7 +93,7 @@ class ApiAccessLog(models.Model):
     request_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
 
     class Meta:
-        db_table = "tbl_api_access_log"
+        table = "tbl_api_access_log"
 
 
 class ApkList(models.Model):
@@ -111,7 +111,7 @@ class ApkList(models.Model):
     create_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
 
     class Meta:
-        db_table = "tbl_apklist"
+        table = "tbl_apklist"
 
 
 class ExcelFile(models.Model):
@@ -125,7 +125,7 @@ class ExcelFile(models.Model):
     create_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
 
     class Meta:
-        db_table = "tbl_excel_file"
+        table = "tbl_excel_file"
 
 
 class ImgFile(models.Model):
@@ -138,4 +138,4 @@ class ImgFile(models.Model):
     create_time = fields.DatetimeField(auto_now_add=True, description='请求时间')
 
     class Meta:
-        db_table = "tbl_img_file"
+        table = "tbl_img_file"

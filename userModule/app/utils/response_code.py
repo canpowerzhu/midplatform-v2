@@ -19,6 +19,7 @@ def resp_200(*, data: Union[list, dict, str]) -> Response:
     )
 
 
+# 自定义异常工具
 def resp_400(*, data: str = None, msg: str = "BAD REQUEST") -> Response:
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,

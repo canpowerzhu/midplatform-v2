@@ -15,6 +15,9 @@ class Auth(BaseModel):
 
 class Policy(BaseModel):
     auth_policy_name: str
+    policy_content: str
+    policy_version: int
+    cur_version: bool
     policy_type: str
     quote_count: int
     comment: Optional[str] = None
