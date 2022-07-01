@@ -19,6 +19,8 @@ class BaseConfig(object):
     PASSKEY = config('PASSKEY', default='')
     PASSOFFSET = config('PASSOFFSET', default='')
     SECRET_KEY = config('SECRET_KEY', default='')
+    ACCESS_SECRET_KEY = config('ACCESS_SECRET_KEY', default='')
+    REFRESH_SECRET_KEY = config('REFRESH_SECRET_KEY', default='')
     #######################################################################################
     # server start param
     SERVER_HOST = config('SERVER_HOST', default='127.0.0.1')
@@ -84,7 +86,8 @@ class PrdConfig(BaseConfig):
     REDIS_PORT = config('REDIS_PORT', cast=int, default=6379)
     REDIS_PASSWD = config('REDIS_PASSWD', default='')
     # 60 minutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24
+    REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     ###################################################################################################################
     # mysql database

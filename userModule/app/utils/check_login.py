@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import Depends, HTTPException, status, Security
 from pydantic import ValidationError
-from jose import jwt,JWTError
+from jose import jwt, JWTError
 
 from fastapi.security import (
     OAuth2PasswordBearer,
@@ -17,17 +17,16 @@ from fastapi.security import (
 from app.conf import setting
 from app.module import schema_user
 
-
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="token",
-    scheme_name={"me": "Read information about the current user.", "items": "Read items."},
+    scopes={"me": "Read information about the current user.", "items": "Read items."},
 )
 
 
 def verify_password(plain_password, hashed_password):
+    print("encryed pass here: ", pwd_context.hash(plain_password))
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -41,6 +40,7 @@ def get_user(db, username: str):
         return schema_user.UserInDB(**user_dict)
 
 
+# 用户名密码认证校验
 def authenticate_user(fake_db, username: str, password: str):
     user = get_user(fake_db, username)
     if not user:
@@ -50,6 +50,7 @@ def authenticate_user(fake_db, username: str, password: str):
     return user
 
 
+# 创建JWT
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     # 传入了按过期时间，否则默认15分钟
@@ -58,13 +59,13 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     else:
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, setting.SECRET_KEY, algorithm=setting.ALGORITHM)
-    return encoded_jwt
+    encoded_jwt = jwt.encode(to_encode, setting.BaseConfig.ACCESS_SECRET_KEY, algorithm=setting.PrdConfig.ALGORITHM)
+    refresh_encoded_jwt = jwt.encode(to_encode, setting.BaseConfig.REFRESH_SECRET_KEY,
+                                     algorithm=setting.PrdConfig.ALGORITHM)
+    return encoded_jwt, refresh_encoded_jwt
 
 
-def get_current_user(user_db,
-                     security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)
-                     ):
+def get_current_user(user_db, security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)):
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
     else:
@@ -74,6 +75,7 @@ def get_current_user(user_db,
         detail="cloud not validate credentials",
         headers={"WWW-Authenticate": authenticate_value}
     )
+    print(token)
     try:
         payload = jwt.decode(token, setting.Config.SECRET_KEY, algorithms=[setting.Config.ALGORITHM])
         username: str = payload.get("sub")
@@ -81,6 +83,7 @@ def get_current_user(user_db,
             raise credentials_exception
         token_scopes = payload.get("scopes", [])
         token_data = schema_user.TokenData(scopes=token_scopes, username=username)
+        print("assss")
     except (JWTError, ValidationError):
         raise credentials_exception
 
@@ -98,8 +101,9 @@ def get_current_user(user_db,
 
 
 def get_current_active_user(
-        current_user: schema_user.UserCreate = Security(get_current_user, scopes=["me"])
+        current_user: schema_user.UserCreate = Depends(get_current_user)
 ):
+    print(current_user.is_active)
     if current_user.is_active:
         raise HTTPException(status_code=400, detail="inactive_user")
     return current_user

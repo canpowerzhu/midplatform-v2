@@ -5,13 +5,14 @@
 
 from fastapi import APIRouter
 from app.module import schema_policy
-from app.utils import  response_code
+from app.utils import response_code
 
 router = APIRouter(
-    prefix="/api/v1/policy",
+    prefix="/api/v1",
     tags=["policy"],
     responses={404: {"description": "Not found"}}
 )
+
 
 @router.get("/policy/list",
             summary="获取权限列表", description="权限列表")
