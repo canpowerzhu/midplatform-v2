@@ -38,12 +38,6 @@ class UserCreate(BaseProperties):
     last_login: datetime = None
     expire_time: datetime = None
 
-    # # 用户名校验只包含数字字母
-    # @validator('username')
-    # def name_only_contain(cls, v):
-    #     assert v.isalnum(), 'must be alphanumeric'
-    #     return v
-
 
 # 查，删，改，
 class User(UserCreate):
@@ -59,8 +53,6 @@ class Attributes(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
-    # attributes: Attributes
-    # expires_ttl: Optional[int] = None
     refresh_token: Optional[str] = None
 
 
@@ -69,5 +61,10 @@ class TokenData(BaseModel):
     scopes: List[str] = []
 
 
-class UserInDB(UserCreate):
+class UserInDB(BaseModel):
+    hashed_password: str
+
+
+class UserLoginDB(BaseModel):
+    username: str
     hashed_password: str

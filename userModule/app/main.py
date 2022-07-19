@@ -24,7 +24,7 @@ async def redirect_back():
     return RedirectResponse("/api/v1/login/token")
 
 
-register_tortoise(app, config=setting.ORM_LINK_CONF, generate_schemas=True)
+register_tortoise(app, config=setting.ORM_LINK_CONF, generate_schemas=False)
 
 if __name__ == '__main__':
     uvicorn.run(app="main:app", host=setting.Config.SERVER_HOST, port=setting.Config.SERVER_PORT, reload=True)

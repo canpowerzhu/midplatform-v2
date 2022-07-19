@@ -13,7 +13,7 @@ class User(models.Model):
     id = fields.IntField(pk=True, index=True)
     nickname = fields.CharField(max_length=30, description="昵称")
     username = fields.CharField(max_length=20, description="用户名")
-    password_hash = fields.CharField(max_length=128, description="加密后的密码")
+    hashed_password = fields.CharField(max_length=128, description="加密后的密码")
     group_id = fields.IntField(default=1, description="用户所属用户组")
     avatar = fields.CharField(max_length=200, description="用户头像存储地址", null=True)
     gender = fields.BooleanField(description="性别，True-男， False-女", default=True)
@@ -33,8 +33,8 @@ class User(models.Model):
     @classmethod
     async def create(cls, user: UserCreate) -> "User":
         user_dict = user.dict()
-        password_hash = get_password_hash(password=user.password)
-        model = cls(**user_dict, password_hash=password_hash)
+        hashed_password = get_password_hash(password=user.password)
+        model = cls(**user_dict, hashed_password=hashed_password)
         await model.save()
         return model
 

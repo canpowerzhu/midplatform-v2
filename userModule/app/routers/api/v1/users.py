@@ -2,14 +2,10 @@
 # @Time    : 2022/2/18 16:52
 # @Software: PyCharm
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,Security
 from app.module.schema_user import UserCreate
-from app.routers.api.v1.login import get_current_active_user
-from app.utils import response_code, check_login
-from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
-import json
-from app.utils.check_login import get_password_hash
+from app.utils.logs import  logger
+from app.utils.check_login import get_password_hash,oauth2_scheme, get_current_active_user
 from app.dao.models import User
 
 router = APIRouter(
@@ -28,6 +24,7 @@ async def get_user():
 @router.get("/user/{user_id}",
             summary="获取用户信息", description="获取用户信息")
 async def get_user_info():
+    logger.info("获取用户信息")
     return {"code": 200, "msg": "success"}
 
 
@@ -37,12 +34,12 @@ async def create_user(user_in: UserCreate):
     create new user
     """
     hashed_password = get_password_hash(user_in.password)
-    print(hashed_password)
 
     db_user = UserCreate(
         **user_in.create_update_dict(), hashed_password=hashed_password
     )
     res = await User.create(db_user)
+
     return {"code": 200, "msg": "success", "msg": res}
 
 

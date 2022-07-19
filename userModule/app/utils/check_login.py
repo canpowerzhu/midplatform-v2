@@ -26,7 +26,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 
 def verify_password(plain_password, hashed_password):
-    print("encryed pass here: ", pwd_context.hash(plain_password))
+    print("encrypted pass here: ", pwd_context.hash(plain_password))
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -37,7 +37,7 @@ def get_password_hash(password):
 def get_user(db, username: str):
     if username in db:
         user_dict = db[username]
-        return schema_user.UserInDB(**user_dict)
+        return schema_user.UserLoginDB(**user_dict)
 
 
 # 用户名密码认证校验
