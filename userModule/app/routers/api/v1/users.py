@@ -23,8 +23,8 @@ async def get_user():
 
 @router.get("/user/{user_id}",
             summary="获取用户信息", description="获取用户信息")
-async def get_user_info():
-    logger.info("获取用户信息")
+async def get_user_info(user_id: int = Depends(oauth2_scheme)):
+    logger.info("获取用户信息"+ user_id)
     return {"code": 200, "msg": "success"}
 
 

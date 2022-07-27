@@ -5,7 +5,7 @@ from fastapi import APIRouter, status, Query
 from fastapi.encoders import jsonable_encoder
 from app.settings import BaseConfig
 from app.dao import models
-from app.module import DataModel
+from app.module import datamodel as DataModel
 from starlette.responses import JSONResponse
 from typing import Optional
 

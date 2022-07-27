@@ -92,4 +92,13 @@ class Webhook_Data(BaseModel):
     """
     token: str
     secret: str
-    send_content: dict
+    dingtalk_content: dict
+
+
+class Email_Data(BaseModel):
+    """
+    邮箱 发送数据结构体
+    """
+    msg_to: str
+    email_content: str
+    email_subject: str

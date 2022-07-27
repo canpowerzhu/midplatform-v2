@@ -2,7 +2,7 @@
 # @Time    : 2021/7/21 12:02
 # @Software: PyCharm
 from fastapi import APIRouter
-from app.module import DataModel
+from app.module import datamodel as DataModel
 from app.utils import password_salt
 from app.settings import BaseConfig
 

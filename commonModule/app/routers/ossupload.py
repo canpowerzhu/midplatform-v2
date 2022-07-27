@@ -3,7 +3,7 @@
 # @Software: PyCharm
 
 from fastapi import APIRouter, status, File, UploadFile
-from app.module import DataModel
+from app.module import datamodel as DataModel
 from app.utils import oss_operate, parse_apk,excel_file
 from tempfile import NamedTemporaryFile
 import shutil

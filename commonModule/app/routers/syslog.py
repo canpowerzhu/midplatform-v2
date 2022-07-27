@@ -4,7 +4,7 @@
 import datetime
 
 from fastapi import APIRouter, status, Query
-from app.module import DataModel
+from app.module import datamodel as DataModel
 from app.dao import models
 from app.settings import BaseConfig
 from starlette.responses import JSONResponse
